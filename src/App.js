@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { Fragment, useMemo } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { router } from "./routes";
+import { RouterProvider } from "react-router-dom";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { createMuiTheme } from "./theme";
 
 function App() {
+  const theme = useMemo(() => {
+    return createMuiTheme("light");
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
+
+        <CssBaseline />
+      </ThemeProvider>
+      <ToastContainer position="top-right" autoClose={3000} closeOnClick />
+    </Fragment>
   );
 }
 
