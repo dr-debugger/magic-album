@@ -4,9 +4,9 @@ const themeOptions = [
   {
     name: "light",
     option: {
-      // typography: {
-      //   fontFamily: ["Poppins", "sans-serif"].join(","),
-      // },
+      typography: {
+        fontFamily: ["Poppins", "sans-serif"].join(","),
+      },
       palette: {
         mode: "light",
         // primary: {

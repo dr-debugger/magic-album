@@ -1,17 +1,28 @@
 import React, { createContext, useEffect, useState } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 export const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
-  const [initialized, setInitialized] = useState(true);
-
-  const navigate = useNavigate();
+  const [state, setState] = useState({
+    isAuthenticated: false,
+    initialized: true,
+    user: null,
+  });
 
   const getDataOnLoad = async () => {
-    setInitialized(false);
+    setState((prev) => ({
+      ...prev,
+      initialized: false,
+    }));
+  };
+
+  const onLoginSuccess = () => {
+    setState((prev) => ({
+      ...prev,
+      initialized: false,
+      isAuthenticated: true,
+    }));
   };
 
   const logOut = () => {};
@@ -23,10 +34,9 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated,
-        user,
-        initialized,
+        ...state,
         logOut,
+        onLoginSuccess,
       }}
     >
       {children}
