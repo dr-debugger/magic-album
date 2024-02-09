@@ -10,9 +10,24 @@ code {
     monospace;
 }
 
-
-.flex_center_display{ 
+.flex_center_display {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.create_album_img {
+  width: 100%; /* Default width for all screen sizes */
+}
+
+@media (max-width: 800px) {
+  .create_album_img {
+    width: 400px; 
+  }
+}
+
+@media (max-width: 400px) {
+ .create_album_img {
+    width: 300px; 
+  }
 }

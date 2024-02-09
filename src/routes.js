@@ -1,9 +1,10 @@
 import AuthguardWithLayout from "./layouts/guards/AuthguardWithLayout";
-import Album from "./pages/Album";
 import Error from "./pages/Error";
 import { createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
 import { AuthLayout } from "./context/AuthContext";
+import Album from "./pages/album";
+import CreateAlbum from "./pages/create_album";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
           {
             path: "album",
             element: <Album />,
+          },
+          {
+            path: "create-album",
+            element: <CreateAlbum />,
           },
         ],
       },

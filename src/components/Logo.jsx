@@ -8,7 +8,6 @@ const Logo = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-
         gap: 0.5,
       }}
     >

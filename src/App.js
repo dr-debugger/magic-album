@@ -14,7 +14,6 @@ function App() {
     <Fragment>
       <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
-
         <CssBaseline />
       </ThemeProvider>
       <ToastContainer position="top-right" autoClose={3000} closeOnClick />
