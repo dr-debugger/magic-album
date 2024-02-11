@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import { AuthLayout } from "./context/AuthContext";
 import Album from "./pages/album";
 import CreateAlbum from "./pages/create_album";
+import AlbumInfo from "./pages/album_info";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
           {
             path: "album",
             element: <Album />,
+          },
+          {
+            path: "album/:id",
+            element: <AlbumInfo />,
           },
           {
             path: "create-album",

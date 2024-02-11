@@ -5,7 +5,12 @@ const AlbumItems = () => {
   return (
     <Fragment>
       <Grid container spacing={2}>
-        <Grid item xs={4}>
+        <Grid
+          item
+          md={4}
+          className="flex_center_display"
+          sx={{ width: "100%" }}
+        >
           <Box
             sx={{
               position: "relative",
@@ -56,7 +61,12 @@ const AlbumItems = () => {
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={4}>
+        <Grid
+          item
+          md={4}
+          className="flex_center_display"
+          sx={{ width: "100%" }}
+        >
           <Box
             sx={{
               position: "relative",

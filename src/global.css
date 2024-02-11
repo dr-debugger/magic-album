@@ -20,14 +20,27 @@ code {
   width: 100%; /* Default width for all screen sizes */
 }
 
+.play_vid_img {
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
+  cursor: pointer;
+}
+
 @media (max-width: 800px) {
   .create_album_img {
-    width: 400px; 
+    width: 400px;
   }
+    .play_vid_img {
+    width: 100px;
+    right: 25% !important;
+  }
+  
 }
 
 @media (max-width: 400px) {
- .create_album_img {
-    width: 300px; 
+  .create_album_img {
+    width: 300px;
   }
+
 }

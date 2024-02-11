@@ -35,6 +35,7 @@ const Album = () => {
               mb: 3,
               mt: 2,
             }}
+            className="flex_center_display"
             onClick={() => {
               navigate("/create-album");
             }}
