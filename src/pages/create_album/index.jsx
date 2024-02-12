@@ -2,6 +2,7 @@ import React from "react";
 import HeaderWithBack from "../../components/HeaderWithBack";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import UploadImgAndVid from "./UploadImgAndVid";
 
 const CreateAlbum = () => {
   const navigate = useNavigate();
@@ -75,6 +76,8 @@ const CreateAlbum = () => {
               size="small"
             />
           </Box>
+
+          <UploadImgAndVid />
 
           <Paper
             elevation={2}
