@@ -7,6 +7,35 @@ export const uniqueId = (length = 10) => {
   );
 };
 
+export const convertBlobToBase64 = (file) => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      return resolve({
+        status: true,
+        value: reader.result,
+      });
+    };
+    reader.onerror = function (error) {
+      console.log("Error: ", error);
+      return resolve({
+        status: false,
+        value: null,
+      });
+    };
+  });
+};
+
+export const isImage = (type) => {
+  const imageTypes = ["webp", "png", "jpeg", "jpg"];
+  return imageTypes.some((elem) => type.toLowerCase().includes(elem));
+};
+export const isVideo = (type) => {
+  const imageTypes = ["mp4", "mov"];
+  return imageTypes.some((elem) => type.toLowerCase().includes(elem));
+};
+
 export const AlphabeticID = {
   index: "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 

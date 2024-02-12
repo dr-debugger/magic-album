@@ -1,7 +1,13 @@
 import { Box, Grid, Typography } from "@mui/material";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
-import { AlphabeticID, uniqueId } from "../../utils/utilsFunc";
+import {
+  isImage,
+  isVideo,
+  convertBlobToBase64,
+  uniqueId,
+} from "../../utils/utilsFunc";
+import SplashScreen from "../../components/SplashScreen";
 
 const UploadImgAndVid = () => {
   const [pairs, setPairs] = useState([
@@ -10,7 +16,58 @@ const UploadImgAndVid = () => {
       img: null,
       vid: null,
     },
+    {
+      id: uniqueId(),
+      img: null,
+      vid: null,
+    },
   ]);
+
+  const onFileChange = (e, type, id) => {
+    const file = e.target.files[0];
+    // console.log(file);
+
+    if (file) {
+      const dummyArr = [...pairs];
+      const index = dummyArr.findIndex((elem) => elem.id === id);
+
+      if (index >= 0) {
+        const dummyItem = dummyArr[index];
+        let img = dummyItem.img,
+          vid = dummyItem.vid;
+        if (type === "IMG" && isImage(file.type)) {
+          img = file;
+        }
+        if (type === "VID" && isVideo(file.type)) {
+          vid = file;
+        }
+
+        dummyArr.splice(index, 1, {
+          ...dummyItem,
+          img,
+          vid,
+        });
+
+        setPairs(dummyArr);
+      }
+    }
+  };
+
+  const onCancelItem = (id, type) => {
+    const dummyArr = [...pairs];
+    const index = dummyArr.findIndex((elem) => elem.id === id);
+
+    if (index >= 0) {
+      const dummyItem = dummyArr[index];
+      dummyArr.splice(index, 1, {
+        ...dummyItem,
+        img: type === "IMG" ? null : dummyItem.img,
+        vid: type === "VID" ? null : dummyItem.vid,
+      });
+
+      setPairs(dummyArr);
+    }
+  };
 
   return (
     <Box>
@@ -48,8 +105,21 @@ const UploadImgAndVid = () => {
                         alt="img"
                         style={{ width: "100%" }}
                       />
-                      <input type="file" accept="image/*" class="file-input" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="file-input"
+                        onChange={(e) => onFileChange(e, "IMG", elem.id)}
+                      />
                     </Box>
+                  )}
+                  {elem.img !== null && (
+                    <DisplayImgAndVid
+                      blob={elem.img}
+                      type="IMG"
+                      id={elem.id}
+                      onCancelItem={onCancelItem}
+                    />
                   )}
                 </Grid>
                 <Grid item xs={1}>
@@ -63,25 +133,136 @@ const UploadImgAndVid = () => {
                   </Box>
                 </Grid>
                 <Grid item xs={5.5}>
-                  <Box
-                    className="flex_center_display"
-                    sx={{
-                      position: "relative",
-                    }}
-                  >
-                    <img
-                      src="/images/vid_upload.png"
-                      alt="img"
-                      style={{ width: "100%" }}
+                  {elem.vid === null && (
+                    <Box
+                      className="flex_center_display"
+                      sx={{
+                        position: "relative",
+                      }}
+                    >
+                      <img
+                        src="/images/vid_upload.png"
+                        alt="img"
+                        style={{ width: "100%" }}
+                      />
+                      <input
+                        type="file"
+                        accept="video/*"
+                        className="file-input"
+                        onChange={(e) => onFileChange(e, "VID", elem.id)}
+                      />
+                    </Box>
+                  )}
+                  {elem.vid !== null && (
+                    <DisplayImgAndVid
+                      blob={elem.vid}
+                      type="VID"
+                      id={elem.id}
+                      onCancelItem={onCancelItem}
                     />
-                    <input type="file" accept="video/*" class="file-input" />
-                  </Box>
+                  )}
                 </Grid>
               </Grid>
             </Box>
           </Fragment>
         ))}
     </Box>
+  );
+};
+
+const DisplayImgAndVid = ({ blob, type, id, onCancelItem }) => {
+  const [loading, setLoading] = useState(false);
+
+  const [fileData, setFileData] = useState("");
+
+  const doOperationOnFile = async () => {
+    setLoading(true);
+    const promise_data = convertBlobToBase64(blob);
+    const res = await promise_data;
+    if (res.status) {
+      setFileData(res.value);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    doOperationOnFile();
+  }, []);
+
+  return (
+    <Fragment>
+      {type === "IMG" && (
+        <Box
+          className="flex_center_display"
+          sx={{
+            position: "relative",
+            height: "100%",
+          }}
+        >
+          {loading && <SplashScreen />}
+
+          {!loading && fileData !== "" && (
+            <Fragment>
+              <img
+                src={fileData}
+                alt="img"
+                style={{
+                  maxWidth: "386px",
+                  maxHeight: "257px",
+                }}
+              />
+              <img
+                src="/images/cross.png"
+                alt="img"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  cursor: "pointer",
+                }}
+                onClick={() => onCancelItem(id, type)}
+              />
+            </Fragment>
+          )}
+        </Box>
+      )}
+      {type === "VID" && (
+        <Box
+          className="flex_center_display"
+          sx={{
+            position: "relative",
+            height: "100%",
+          }}
+        >
+          {loading && <SplashScreen />}
+
+          {!loading && fileData !== "" && (
+            <Fragment>
+              <video
+                src={fileData}
+                autoPlay
+                muted
+                style={{
+                  maxWidth: "386px",
+                  maxHeight: "257px",
+                }}
+              />
+              <img
+                src="/images/cross.png"
+                alt="img"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  cursor: "pointer",
+                }}
+                onClick={() => onCancelItem(id, type)}
+              />
+            </Fragment>
+          )}
+        </Box>
+      )}
+    </Fragment>
   );
 };
 
