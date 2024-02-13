@@ -36,6 +36,11 @@ code {
   cursor: pointer;
 }
 
+.img_vid {
+  max-width: 386px;
+  max-height: 257px;
+}
+
 @media (max-width: 800px) {
   .create_album_img {
     width: 400px;
@@ -43,6 +48,10 @@ code {
   .play_vid_img {
     width: 100px;
     right: 25% !important;
+  }
+  .img_vid {
+    max-width: 171px;
+    max-height: 113px;
   }
 }
 

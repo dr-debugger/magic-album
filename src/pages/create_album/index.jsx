@@ -1,14 +1,72 @@
-import React from "react";
+import React, { Fragment, useState } from "react";
 import HeaderWithBack from "../../components/HeaderWithBack";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import UploadImgAndVid from "./UploadImgAndVid";
+import { createAlbumAction, uploadImgVid } from "../../actions/album_actions";
+import { uniqueId } from "../../utils/utilsFunc";
+import { toast } from "react-toastify";
 
 const CreateAlbum = () => {
   const navigate = useNavigate();
 
-  const onUpload = () => {
-    navigate(`/album/id`);
+  const [albumId, setAlbId] = useState(null);
+  const [albName, setAlbName] = useState("");
+  const [pairs, setPairs] = useState([
+    {
+      id: uniqueId(),
+      img: null,
+      vid: null,
+    },
+    {
+      id: uniqueId(),
+      img: null,
+      vid: null,
+    },
+  ]);
+
+  const validate = () => {
+    return (
+      pairs.length > 1 &&
+      pairs.every((item) => item.img !== null && item.vid !== null) &&
+      albumId
+    );
+  };
+
+  const onUploadImgVid = async () => {
+    if (validate()) {
+      const formData = new FormData();
+
+      for (let i = 0; i < pairs.length; i++) {
+        const item = pairs[i];
+        if (item.img) {
+          formData.append("images", item.img);
+        }
+        if (item.vid) {
+          formData.append("videos", item.vid);
+        }
+      }
+
+      formData.append("albumId", albumId);
+      // console.log(formData, "formdata");
+      const response = await uploadImgVid(formData);
+      if (response.status) {
+        navigate(`/album/${albumId}`);
+      }
+    } else toast.error("Validate first");
+  };
+
+  const onCreate = async () => {
+    if (albName.trim() === "") {
+      toast.error("Enter valid name");
+      return;
+    }
+    const response = await createAlbumAction({
+      name: albName,
+    });
+    if (response.status) {
+      setAlbId(response.data?.data?.id);
+    } else toast.error(response.mesaage);
   };
 
   return (
@@ -63,93 +121,110 @@ const CreateAlbum = () => {
             >
               Album Name
             </Typography>
-            <TextField
-              variant="outlined"
-              fullWidth
-              sx={{
-                "& .MuiInputBase-root": {
-                  borderRadius: "20px",
-                  mb: 2,
-                },
-              }}
-              placeholder="Name"
-              size="small"
-            />
-          </Box>
-
-          <UploadImgAndVid />
-
-          <Paper
-            elevation={2}
-            sx={{
-              py: 1,
-              px: 4,
-              zIndex: 9999,
-              width: {
-                xs: "100%",
-                md: "auto",
-              },
-              position: "fixed",
-              bottom: {
-                xs: "0%",
-                md: "3%",
-              },
-              right: {
-                xs: "0%",
-                md: "40%",
-              },
-              borderRadius: {
-                xs: "0px",
-                md: "33px",
-              },
-            }}
-          >
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
-                gap: 4,
+                gap: 2,
+                mb: 2,
               }}
             >
-              <Box>
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                    fontSize: "20px",
-                    textWrap: "nowrap",
-                  }}
-                >
-                  5 photos
-                </Typography>
-                <Typography
-                  sx={{
-                    color: "#00980F",
-                    fontSize: "14px",
-                    textWrap: "nowrap",
-                  }}
-                >
-                  Pairs Complete
-                </Typography>
-              </Box>
-              <Button
-                sx={{
-                  borderRadius: "20px",
-                  py: "8px",
-                  fontWeight: "bold",
-                  mb: 2,
-                  my: "auto",
-                  minWidth: "150px",
-                }}
-                color="primary"
-                variant="contained"
+              <TextField
+                variant="outlined"
                 fullWidth
-                onClick={onUpload}
-              >
-                Upload
+                sx={{
+                  "& .MuiInputBase-root": {
+                    borderRadius: "20px",
+                  },
+                }}
+                placeholder="Name"
+                size="small"
+                value={albName}
+                onChange={(e) => setAlbName(e.target.value)}
+              />
+              <Button variant="outlined" onClick={onCreate}>
+                Create
               </Button>
             </Box>
-          </Paper>
+          </Box>
+
+          {albumId && (
+            <Fragment>
+              <UploadImgAndVid pairs={pairs} setPairs={setPairs} />
+
+              <Paper
+                elevation={2}
+                sx={{
+                  py: 1,
+                  px: 4,
+                  zIndex: 9999,
+                  width: {
+                    xs: "100%",
+                    md: "auto",
+                  },
+                  position: "fixed",
+                  bottom: {
+                    xs: "0%",
+                    md: "3%",
+                  },
+                  right: {
+                    xs: "0%",
+                    md: "40%",
+                  },
+                  borderRadius: {
+                    xs: "0px",
+                    md: "33px",
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 4,
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        textWrap: "nowrap",
+                      }}
+                    >
+                      5 photos
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: "#00980F",
+                        fontSize: "14px",
+                        textWrap: "nowrap",
+                      }}
+                    >
+                      Pairs Complete
+                    </Typography>
+                  </Box>
+                  <Button
+                    sx={{
+                      borderRadius: "20px",
+                      py: "8px",
+                      fontWeight: "bold",
+                      mb: 2,
+                      my: "auto",
+                      minWidth: "150px",
+                    }}
+                    color="primary"
+                    variant="contained"
+                    fullWidth
+                    onClick={onUploadImgVid}
+                  >
+                    Upload
+                  </Button>
+                </Box>
+              </Paper>
+            </Fragment>
+          )}
         </Box>
       </Box>
     </div>

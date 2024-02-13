@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
 import React, { Fragment, useEffect, useState } from "react";
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
 import {
@@ -8,21 +8,12 @@ import {
   uniqueId,
 } from "../../utils/utilsFunc";
 import SplashScreen from "../../components/SplashScreen";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 
-const UploadImgAndVid = () => {
-  const [pairs, setPairs] = useState([
-    {
-      id: uniqueId(),
-      img: null,
-      vid: null,
-    },
-    {
-      id: uniqueId(),
-      img: null,
-      vid: null,
-    },
-  ]);
+// const PREFIX = "MAGIC_ALBUM_";
 
+const UploadImgAndVid = ({ setPairs, pairs }) => {
   const onFileChange = (e, type, id) => {
     const file = e.target.files[0];
     // console.log(file);
@@ -68,21 +59,64 @@ const UploadImgAndVid = () => {
       setPairs(dummyArr);
     }
   };
+  const onAddDelete = (type, id) => {
+    if (type === "ADD") {
+      const item = {
+        id: uniqueId(),
+        img: null,
+        vid: null,
+      };
+      setPairs((prev) => [...prev, { ...item }]);
+    }
+    if (type === "REM") {
+      const index = pairs.findIndex((elem) => elem.id === id);
+
+      if (index > -1) {
+        const dummyArr = [...pairs];
+        dummyArr.splice(index, 1);
+        setPairs(dummyArr);
+      }
+    }
+  };
 
   return (
     <Box>
+      <Button
+        variant="outlined"
+        startIcon={<AddOutlinedIcon />}
+        onClick={() => onAddDelete("ADD")}
+        sx={{
+          my: 2,
+        }}
+      >
+        Add pairs
+      </Button>
       {pairs.length > 0 &&
         pairs.map((elem, i) => (
           <Fragment key={i}>
-            <Typography
+            <Box
               sx={{
-                fontWeight: "bold",
-                fontSize: "24px",
-                mb: 2,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              Photo {i + 1}
-            </Typography>
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "24px",
+                  mb: 2,
+                }}
+              >
+                Photo {i + 1}
+              </Typography>
+              <IconButton
+                onClick={() => onAddDelete("REM", elem.id)}
+                disabled={pairs.length === 1}
+              >
+                <RemoveOutlinedIcon />
+              </IconButton>
+            </Box>
             <Box
               sx={{
                 p: 2,
@@ -203,14 +237,7 @@ const DisplayImgAndVid = ({ blob, type, id, onCancelItem }) => {
 
           {!loading && fileData !== "" && (
             <Fragment>
-              <img
-                src={fileData}
-                alt="img"
-                style={{
-                  maxWidth: "386px",
-                  maxHeight: "257px",
-                }}
-              />
+              <img src={fileData} alt="img" className="img_vid" />
               <img
                 src="/images/cross.png"
                 alt="img"
@@ -238,15 +265,7 @@ const DisplayImgAndVid = ({ blob, type, id, onCancelItem }) => {
 
           {!loading && fileData !== "" && (
             <Fragment>
-              <video
-                src={fileData}
-                autoPlay
-                muted
-                style={{
-                  maxWidth: "386px",
-                  maxHeight: "257px",
-                }}
-              />
+              <video src={fileData} autoPlay muted className="img_vid" />
               <img
                 src="/images/cross.png"
                 alt="img"
