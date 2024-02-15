@@ -12,7 +12,7 @@ export const uploadImgVid = async (body) => {
       return Promise.resolve({
         status: true,
         data: res.data,
-        mesaage: "Upload Successfully!",
+        message: "Uploaded Successfully!",
       });
     }
     throw new Error();
@@ -21,7 +21,7 @@ export const uploadImgVid = async (body) => {
     return Promise.resolve({
       status: false,
       data: null,
-      mesaage: "Failed to upload!",
+      message: "Failed to upload!",
     });
   }
 };
@@ -33,7 +33,7 @@ export const createAlbumAction = async (body) => {
       return Promise.resolve({
         status: true,
         data: res.data,
-        mesaage: "Create Successfully!",
+        message: "Created Successfully!",
       });
     }
 
@@ -43,7 +43,7 @@ export const createAlbumAction = async (body) => {
     return Promise.resolve({
       status: false,
       data: null,
-      mesaage: "Failed to create!",
+      message: "Failed to create!",
     });
   }
 };
@@ -56,7 +56,7 @@ export const getAlbumListAction = async () => {
       return Promise.resolve({
         status: true,
         data: res.data,
-        mesaage: "Upload Successfully!",
+        message: "list fetched successfully!",
       });
     }
     throw new Error();
@@ -65,7 +65,7 @@ export const getAlbumListAction = async () => {
     return Promise.resolve({
       status: false,
       data: null,
-      mesaage: "Failed to upload!",
+      message: "Failed to fetch list!",
     });
   }
 };
@@ -78,7 +78,7 @@ export const getQRAction = async (id) => {
       return Promise.resolve({
         status: true,
         data: res.data,
-        mesaage: "qr successfully fetchd!",
+        message: "qr successfully fetched!",
       });
     }
     throw new Error();
@@ -89,7 +89,7 @@ export const getQRAction = async (id) => {
     return Promise.resolve({
       status: false,
       data: null,
-      mesaage: "QR Failed to fetch!",
+      message: "QR Failed to fetch!",
     });
   }
 };

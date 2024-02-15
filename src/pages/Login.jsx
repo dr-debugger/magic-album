@@ -17,6 +17,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Logo from "../components/Logo";
 import { useAuth } from "../hooks/contextHooks";
 import { loginAction } from "../actions/authActions";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -40,8 +41,10 @@ const Login = () => {
         ...formData,
       });
       // console.log(res);
-      localStorage.setItem("token", res.data?.data?.token);
-      onLoginSuccess();
+      if (res.status) {
+        localStorage.setItem("token", res.data?.data?.token);
+        onLoginSuccess(res.data?.data?.token || "");
+      } else toast.error(res.message);
     }
   };
 

@@ -51,6 +51,7 @@ const CreateAlbum = () => {
       // console.log(formData, "formdata");
       const response = await uploadImgVid(formData);
       if (response.status) {
+        toast.success(response.message);
         navigate(`/album/${albumId}`);
       }
     } else toast.error("Validate first");
@@ -66,7 +67,7 @@ const CreateAlbum = () => {
     });
     if (response.status) {
       setAlbId(response.data?.data?.id);
-    } else toast.error(response.mesaage);
+    } else toast.error(response.message);
   };
 
   return (

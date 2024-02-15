@@ -40,6 +40,9 @@ code {
   max-width: 386px;
   max-height: 257px;
 }
+.qr_img{
+  max-width: 100px;
+}
 
 @media (max-width: 800px) {
   .create_album_img {

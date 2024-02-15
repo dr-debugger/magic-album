@@ -13,31 +13,37 @@ const AuthProvider = ({ children }) => {
   });
 
   const getDataOnLoad = async () => {
-    const token = localStorage.getItem("token");
-    axiosInstance.defaults.headers.Authorization = `Bearer ${token}`;
+    let isLogin = false,
+      user = null;
 
-    const res = await meAction();
-    if (res.status) {
-      // console.log(res);
-      setState((prev) => ({
-        ...prev,
-        initialized: false,
-        isAuthenticated: true,
-        user: res.data?.data || {},
-      }));
-    } else {
-      localStorage.removeItem("token");
-      delete axiosInstance.defaults.headers.Authorization;
-      setState((prev) => ({
-        ...prev,
-        initialized: false,
-        isAuthenticated: false,
-        user: null,
-      }));
+    try {
+      const ACCESS_TOKEN = localStorage.getItem("token");
+      if (ACCESS_TOKEN) {
+        axiosInstance.defaults.headers.common.Authorization = `Bearer ${ACCESS_TOKEN}`;
+
+        const response = await meAction();
+        // console.log(response, "context");
+
+        if (response?.status) {
+          isLogin = true;
+          user = response.data?.data || {};
+        } else throw new Error();
+      } else throw new Error();
+    } catch (err) {
+      delete axiosInstance.defaults.headers.common.Authorization;
+      localStorage.removeItem("accessToken");
     }
+
+    setState((prev) => ({
+      ...prev,
+      initialized: false,
+      isAuthenticated: isLogin,
+      user,
+    }));
   };
 
-  const onLoginSuccess = () => {
+  const onLoginSuccess = (token) => {
+    axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
     getDataOnLoad();
   };
 

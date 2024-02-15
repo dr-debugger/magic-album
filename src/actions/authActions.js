@@ -8,7 +8,7 @@ export const meAction = async () => {
       return Promise.resolve({
         status: true,
         data: res.data,
-        mesaage: "user successfully fetchd!",
+        message: "user successfully fetchd!",
       });
     }
     throw new Error();
@@ -19,7 +19,7 @@ export const meAction = async () => {
     return Promise.resolve({
       status: false,
       data: null,
-      mesaage: "Failed to fetch!",
+      message: "Failed to fetch!",
     });
   }
 };
@@ -31,7 +31,7 @@ export const loginAction = async (body) => {
       return Promise.resolve({
         status: true,
         data: res.data,
-        mesaage: "login Successfully!",
+        message: "login Successfully!",
       });
     }
     throw new Error();
@@ -40,7 +40,7 @@ export const loginAction = async (body) => {
     return Promise.resolve({
       status: false,
       data: null,
-      mesaage: "Failed to login!",
+      message: "Failed to login!",
     });
   }
 };

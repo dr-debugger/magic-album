@@ -1,17 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import HeaderWithBack from "../../components/HeaderWithBack";
 import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useParams } from "react-router-dom";
 import { getQRAction } from "../../actions/album_actions";
+import { toast } from "react-toastify";
 
 const AlbumInfo = () => {
   const params = useParams();
+  const [qrData, setQrData] = useState("");
 
   const getQr = async () => {
     const res = await getQRAction(params.id);
 
-    console.log(res);
+    if (res.status) {
+      setQrData(res.data.data.data);
+    } else toast.error(res.message);
   };
 
   useEffect(() => {
@@ -40,8 +44,51 @@ const AlbumInfo = () => {
         >
           <Box>
             <Grid container spacing={2}>
-              <Grid item md={5}></Grid>
-              <Grid item md={7}>
+              <Grid item md={5} sx={{ width: "100%" }}>
+                <Box
+                  sx={{
+                    bgcolor: "#F5F5F5",
+                    borderRadius: "10px",
+                    p: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    flexDirection: "column",
+                    width: "100%",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "20px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Album QR Code
+                  </Typography>
+                  {qrData !== "" && (
+                    <img src={`data:image/png;base64,${qrData}`} alt="img" />
+                  )}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <img
+                      src="/images/down_qr.png"
+                      alt="img"
+                      className="qr_img"
+                    />
+                    <img
+                      src="/images/share_qr.png"
+                      alt="img"
+                      className="qr_img"
+                    />
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item md={7} sx={{ width: "100%" }}>
                 <Typography
                   sx={{
                     fontWeight: "bold",
@@ -52,6 +99,7 @@ const AlbumInfo = () => {
                   Album Name
                 </Typography>
                 <TextField
+                  disabled
                   variant="outlined"
                   fullWidth
                   sx={{
@@ -73,6 +121,7 @@ const AlbumInfo = () => {
                   No of Photos (Pairs)
                 </Typography>
                 <TextField
+                  disabled
                   variant="outlined"
                   fullWidth
                   sx={{
@@ -94,6 +143,7 @@ const AlbumInfo = () => {
                   Album Code
                 </Typography>
                 <TextField
+                  disabled
                   variant="outlined"
                   fullWidth
                   sx={{
