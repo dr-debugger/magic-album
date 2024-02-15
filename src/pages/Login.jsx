@@ -16,13 +16,33 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Logo from "../components/Logo";
 import { useAuth } from "../hooks/contextHooks";
+import { loginAction } from "../actions/authActions";
 
 const Login = () => {
+  const [formData, setFormData] = useState({
+    email: "admin@magicalbum.in",
+    password: "Test@1234",
+  });
+
   const [showPassword, setShowPassword] = useState(false);
   const { onLoginSuccess } = useAuth();
 
+  const onInputChange = (key, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
   const onLogin = async () => {
-    onLoginSuccess();
+    if (formData.email.trim() !== "" && formData.password.trim() !== "") {
+      const res = await loginAction({
+        ...formData,
+      });
+      // console.log(res);
+      localStorage.setItem("token", res.data?.data?.token);
+      onLoginSuccess();
+    }
   };
 
   return (
@@ -69,6 +89,8 @@ const Login = () => {
             }}
             placeholder="Enter Username"
             size="small"
+            onChange={(e) => onInputChange("email", e.target.value)}
+            value={formData.email}
           />
           <FormControl
             fullWidth
@@ -84,6 +106,8 @@ const Login = () => {
               placeholder="Enter Password"
               size="small"
               type={showPassword ? "text" : "password"}
+              onChange={(e) => onInputChange("password", e.target.value)}
+              value={formData.password}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

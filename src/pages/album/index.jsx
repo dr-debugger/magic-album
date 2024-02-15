@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../layouts/Header";
 import {
   Box,
@@ -10,9 +10,21 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 import AlbumItems from "./AlbumItems";
+import { getAlbumListAction } from "../../actions/album_actions";
 
 const Album = () => {
   const navigate = useNavigate();
+
+  const getAlbums = async () => {
+    const res = await getAlbumListAction();
+    console.log(res, "albumlist");
+    if (res.status) {
+    }
+  };
+
+  useEffect(() => {
+    getAlbums();
+  }, []);
   return (
     <div>
       <Header />

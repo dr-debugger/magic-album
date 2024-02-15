@@ -1,5 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import axiosInstance from "../actions";
+import { meAction } from "../actions/authActions";
 
 export const AuthContext = createContext({});
 
@@ -11,18 +13,32 @@ const AuthProvider = ({ children }) => {
   });
 
   const getDataOnLoad = async () => {
-    setState((prev) => ({
-      ...prev,
-      initialized: false,
-    }));
+    const token = localStorage.getItem("token");
+    axiosInstance.defaults.headers.Authorization = `Bearer ${token}`;
+
+    const res = await meAction();
+    if (res.status) {
+      // console.log(res);
+      setState((prev) => ({
+        ...prev,
+        initialized: false,
+        isAuthenticated: true,
+        user: res.data?.data || {},
+      }));
+    } else {
+      localStorage.removeItem("token");
+      delete axiosInstance.defaults.headers.Authorization;
+      setState((prev) => ({
+        ...prev,
+        initialized: false,
+        isAuthenticated: false,
+        user: null,
+      }));
+    }
   };
 
   const onLoginSuccess = () => {
-    setState((prev) => ({
-      ...prev,
-      initialized: false,
-      isAuthenticated: true,
-    }));
+    getDataOnLoad();
   };
 
   const logOut = () => {};

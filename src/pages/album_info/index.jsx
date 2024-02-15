@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HeaderWithBack from "../../components/HeaderWithBack";
 import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useParams } from "react-router-dom";
+import { getQRAction } from "../../actions/album_actions";
 
 const AlbumInfo = () => {
+  const params = useParams();
+
+  const getQr = async () => {
+    const res = await getQRAction(params.id);
+
+    console.log(res);
+  };
+
+  useEffect(() => {
+    if (params?.id) {
+      getQr();
+    }
+  }, [params]);
+
   return (
     <div>
       <HeaderWithBack title="Album Information" link="/album" />
