@@ -8,6 +8,7 @@ import {
   getQRAction,
 } from "../../actions/album_actions";
 import { toast } from "react-toastify";
+import { downloadBase64File } from "../../utils/utilsFunc";
 
 const AlbumInfo = () => {
   const params = useParams();
@@ -55,7 +56,7 @@ const AlbumInfo = () => {
             position: "relative",
           }}
         >
-          <Box>
+          <Box sx={{ mt: 4 }}>
             <Grid container spacing={2}>
               <Grid item md={5} sx={{ width: "100%" }}>
                 <Box
@@ -79,7 +80,11 @@ const AlbumInfo = () => {
                     Album QR Code
                   </Typography>
                   {qrData !== "" && (
-                    <img src={`data:image/png;base64,${qrData}`} alt="img" />
+                    <img
+                      src={`data:image/png;base64,${qrData}`}
+                      alt="img"
+                      className="qr_code"
+                    />
                   )}
                   <Box
                     sx={{
@@ -92,6 +97,7 @@ const AlbumInfo = () => {
                       src="/images/down_qr.png"
                       alt="img"
                       className="qr_img"
+                      onClick={() => downloadBase64File(qrData)}
                     />
                     <img
                       src="/images/share_qr.png"
@@ -178,7 +184,7 @@ const AlbumInfo = () => {
               </Grid>
             </Grid>
           </Box>
-          <Box>
+          <Box sx={{ mt: 6 }}>
             <Typography
               sx={{
                 fontWeight: "bold",
@@ -190,7 +196,7 @@ const AlbumInfo = () => {
             </Typography>
             <Grid
               container
-              spacing={2}
+              spacing={3}
               sx={{
                 bgcolor: "#F5F5F5",
                 borderRadius: "10px",
@@ -207,14 +213,7 @@ const AlbumInfo = () => {
                     className="flex_center_display"
                     sx={{ width: "100%" }}
                   >
-                    <img
-                      src={e}
-                      alt="img"
-                      style={{
-                        maxWidth: "318px",
-                        maxHeight: "219px",
-                      }}
-                    />
+                    <img src={e} alt="img" className="album_list_Img" />
                   </Grid>
                 ))}
             </Grid>

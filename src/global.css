@@ -40,13 +40,30 @@ code {
   max-width: 386px;
   max-height: 257px;
 }
-.qr_img{
+
+.album_list_Img {
+  width: 318px;
+  height: 219px;
+  object-position: center;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.qr_code{
+  max-width: 200px;
+}
+.qr_img {
   max-width: 100px;
+  cursor: pointer;
 }
 
 @media (max-width: 800px) {
   .create_album_img {
     width: 400px;
+  }
+  .album_list_Img {
+    width: 100%;
+    object-fit: contain;
   }
   .play_vid_img {
     width: 100px;

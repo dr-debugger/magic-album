@@ -1,8 +1,9 @@
 import { Box, Grid, Typography } from "@mui/material";
 import React, { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AlbumItems = ({ data }) => {
-  console.log(data);
+  const navigate = useNavigate();
   return (
     <Fragment>
       <Grid container spacing={2}>
@@ -14,8 +15,11 @@ const AlbumItems = ({ data }) => {
                 <Grid
                   item
                   md={4}
-                  className="flex_center_display"
-                  sx={{ width: "100%" }}
+                  sx={{
+                    width: "100%",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => navigate(`/album/${elem.id}`)}
                 >
                   <Box
                     sx={{
@@ -23,15 +27,12 @@ const AlbumItems = ({ data }) => {
                       width: "100%",
                     }}
                   >
-                    <img src={elem.images[0]} alt="img" />
-                    <Typography
-                      variant="h4"
-                      sx={{
-                        fontSize: "26px",
-                      }}
-                    >
-                      {elem.name}
-                    </Typography>
+                    <img
+                      src={elem.images[0]}
+                      alt="img"
+                      className="album_list_Img"
+                    />
+
                     <Box
                       sx={{
                         position: "absolute",
@@ -69,6 +70,14 @@ const AlbumItems = ({ data }) => {
                       </Box>
                     </Box>
                   </Box>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontSize: "26px",
+                    }}
+                  >
+                    {elem.name}
+                  </Typography>
                 </Grid>
               )}
             </Fragment>

@@ -36,6 +36,24 @@ export const isVideo = (type) => {
   return imageTypes.some((elem) => type.toLowerCase().includes(elem));
 };
 
+export function downloadBase64File(contentBase64, fileName = "qr") {
+  try {
+    if (!Boolean(contentBase64)) return;
+    const linkSource = `data:image/png;base64,${contentBase64}`;
+    const downloadLink = document.createElement("a");
+    document.body.appendChild(downloadLink);
+
+    downloadLink.href = linkSource;
+    downloadLink.target = "_self";
+    downloadLink.download = fileName;
+    downloadLink.click();
+
+    document.body.removeChild(downloadLink);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export const AlphabeticID = {
   index: "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 
