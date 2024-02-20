@@ -88,6 +88,7 @@ const UploadImgAndVid = ({ setPairs, pairs }) => {
         sx={{
           my: 2,
         }}
+        disabled={pairs.length >= 5}
       >
         Add pairs
       </Button>

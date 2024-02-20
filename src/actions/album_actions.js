@@ -93,3 +93,27 @@ export const getQRAction = async (id) => {
     });
   }
 };
+
+export const getAlbumDetailsAction = async (id) => {
+  try {
+    const res = await axiosInstance.get(`/album/${id}`);
+
+    if (res.status === 200) {
+      return Promise.resolve({
+        status: true,
+        data: res.data,
+        message: "Album details successfully fetched!",
+      });
+    }
+    throw new Error();
+  } catch (err) {
+    console.log(err);
+
+    delete axiosInstance.defaults.headers.Authorization;
+    return Promise.resolve({
+      status: false,
+      data: null,
+      message: "Album details Failed to fetch!",
+    });
+  }
+};

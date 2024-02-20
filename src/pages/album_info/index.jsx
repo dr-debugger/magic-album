@@ -3,12 +3,16 @@ import HeaderWithBack from "../../components/HeaderWithBack";
 import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useParams } from "react-router-dom";
-import { getQRAction } from "../../actions/album_actions";
+import {
+  getAlbumDetailsAction,
+  getQRAction,
+} from "../../actions/album_actions";
 import { toast } from "react-toastify";
 
 const AlbumInfo = () => {
   const params = useParams();
   const [qrData, setQrData] = useState("");
+  const [albumData, setAlbumData] = useState(null);
 
   const getQr = async () => {
     const res = await getQRAction(params.id);
@@ -18,9 +22,18 @@ const AlbumInfo = () => {
     } else toast.error(res.message);
   };
 
+  const getAlbum = async () => {
+    const res = await getAlbumDetailsAction(params.id);
+    console.log(res);
+    if (res.status) {
+      setAlbumData(res.data?.data || null);
+    } else toast.error(res.message);
+  };
+
   useEffect(() => {
     if (params?.id) {
       getQr();
+      getAlbum();
     }
   }, [params]);
 
@@ -108,6 +121,8 @@ const AlbumInfo = () => {
                       mb: 2,
                     },
                   }}
+                  value={albumData?.name || ""}
+                  onChange={() => {}}
                   placeholder="Name"
                   size="small"
                 />
@@ -124,6 +139,9 @@ const AlbumInfo = () => {
                   disabled
                   variant="outlined"
                   fullWidth
+                  type="number"
+                  value={albumData?.images?.length || 0}
+                  onChange={() => {}}
                   sx={{
                     "& .MuiInputBase-root": {
                       borderRadius: "20px",
@@ -146,6 +164,8 @@ const AlbumInfo = () => {
                   disabled
                   variant="outlined"
                   fullWidth
+                  value={`${albumData?.name || ""}${albumData?.id || ""}` || ""}
+                  onChange={() => {}}
                   sx={{
                     "& .MuiInputBase-root": {
                       borderRadius: "20px",
@@ -177,9 +197,9 @@ const AlbumInfo = () => {
                 pb: 2,
               }}
             >
-              {Array(4)
-                .fill(0)
-                .map((e, i) => (
+              {albumData &&
+                albumData?.images?.length > 0 &&
+                albumData.images.map((e, i) => (
                   <Grid
                     key={i}
                     item
@@ -187,7 +207,14 @@ const AlbumInfo = () => {
                     className="flex_center_display"
                     sx={{ width: "100%" }}
                   >
-                    <img src="/images/kohli.png" alt="img" />
+                    <img
+                      src={e}
+                      alt="img"
+                      style={{
+                        maxWidth: "318px",
+                        maxHeight: "219px",
+                      }}
+                    />
                   </Grid>
                 ))}
             </Grid>

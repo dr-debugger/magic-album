@@ -194,7 +194,11 @@ const CreateAlbum = () => {
                         textWrap: "nowrap",
                       }}
                     >
-                      5 photos
+                      {pairs.reduce((acc, cur) => {
+                        if (cur.img && cur.vid) return acc + 1;
+                        return acc;
+                      }, 0)}{" "}
+                      photos
                     </Typography>
                     <Typography
                       sx={{

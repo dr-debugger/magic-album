@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../layouts/Header";
 import {
   Box,
@@ -11,15 +11,18 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 import AlbumItems from "./AlbumItems";
 import { getAlbumListAction } from "../../actions/album_actions";
+import { toast } from "react-toastify";
 
 const Album = () => {
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
 
   const getAlbums = async () => {
     const res = await getAlbumListAction();
-    console.log(res, "albumlist");
+    // console.log(res, "albumlist");
     if (res.status) {
-    }
+      setData(res.data?.data || []);
+    } else toast.error(res.message);
   };
 
   useEffect(() => {
@@ -97,7 +100,7 @@ const Album = () => {
             </FormControl>
           </Box>
 
-          <AlbumItems />
+          <AlbumItems data={data} />
         </Box>
       </Box>
     </div>
