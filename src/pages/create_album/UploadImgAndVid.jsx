@@ -80,7 +80,12 @@ const UploadImgAndVid = ({ setPairs, pairs }) => {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        mb: 6,
+        pb: 4,
+      }}
+    >
       <Button
         variant="outlined"
         startIcon={<AddOutlinedIcon />}

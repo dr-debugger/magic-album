@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 const CreateAlbum = () => {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
   const [albumId, setAlbId] = useState(null);
   const [albName, setAlbName] = useState("");
   const [pairs, setPairs] = useState([
@@ -35,6 +36,7 @@ const CreateAlbum = () => {
 
   const onUploadImgVid = async () => {
     if (validate()) {
+      setLoading(true);
       const formData = new FormData();
 
       for (let i = 0; i < pairs.length; i++) {
@@ -50,6 +52,7 @@ const CreateAlbum = () => {
       formData.append("albumId", albumId);
       // console.log(formData, "formdata");
       const response = await uploadImgVid(formData);
+      setLoading(false);
       if (response.status) {
         toast.success(response.message);
         navigate(`/album/${albumId}`);
@@ -223,6 +226,7 @@ const CreateAlbum = () => {
                     variant="contained"
                     fullWidth
                     onClick={onUploadImgVid}
+                    disabled={loading}
                   >
                     Upload
                   </Button>
