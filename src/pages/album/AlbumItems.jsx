@@ -37,6 +37,7 @@ const AlbumItems = ({ data }) => {
                       sx={{
                         position: "absolute",
                         top: "5%",
+
                         width: "100%",
                       }}
                     >

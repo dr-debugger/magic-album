@@ -6,6 +6,7 @@ import UploadImgAndVid from "./UploadImgAndVid";
 import { createAlbumAction, uploadImgVid } from "../../actions/album_actions";
 import { uniqueId } from "../../utils/utilsFunc";
 import { toast } from "react-toastify";
+import SplashScreen from "../../components/SplashScreen";
 
 const CreateAlbum = () => {
   const navigate = useNavigate();
@@ -74,7 +75,12 @@ const CreateAlbum = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        height: "100vh",
+        overflowY: "scroll",
+      }}
+    >
       <HeaderWithBack title="Create New Album" />
       <Box
         sx={{
@@ -161,7 +167,7 @@ const CreateAlbum = () => {
                 sx={{
                   py: 1,
                   px: 4,
-                  zIndex: 9999,
+                  zIndex: 9,
                   width: {
                     xs: "100%",
                     md: "auto",
@@ -236,6 +242,7 @@ const CreateAlbum = () => {
           )}
         </Box>
       </Box>
+      {loading && <SplashScreen blur />}
     </div>
   );
 };
