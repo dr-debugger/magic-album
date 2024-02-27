@@ -20,16 +20,11 @@ const CreateAlbum = () => {
       img: null,
       vid: null,
     },
-    {
-      id: uniqueId(),
-      img: null,
-      vid: null,
-    },
   ]);
 
   const validate = () => {
     return (
-      pairs.length > 1 &&
+      pairs.length >= 1 &&
       pairs.every((item) => item.img !== null && item.vid !== null) &&
       albumId
     );
