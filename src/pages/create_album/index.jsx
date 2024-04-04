@@ -46,6 +46,7 @@ const CreateAlbum = () => {
       }
 
       formData.append("albumId", albumId);
+      formData.append("albumName", albName);
       // console.log(formData, "formdata");
       const response = await uploadImgVid(formData);
       setLoading(false);

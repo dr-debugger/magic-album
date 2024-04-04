@@ -21,7 +21,7 @@ export const uploadImgVid = async (body) => {
     return Promise.resolve({
       status: false,
       data: null,
-      message: "Failed to upload!",
+      message: err?.response?.data?.message || "Failed to upload!",
     });
   }
 };
@@ -43,7 +43,7 @@ export const createAlbumAction = async (body) => {
     return Promise.resolve({
       status: false,
       data: null,
-      message: "Failed to create!",
+      message: err?.response?.data?.message || "Failed to create!",
     });
   }
 };
@@ -65,7 +65,7 @@ export const getAlbumListAction = async () => {
     return Promise.resolve({
       status: false,
       data: null,
-      message: "Failed to fetch list!",
+      message: err?.response?.data?.message || "Failed to fetch list!",
     });
   }
 };
@@ -89,7 +89,7 @@ export const getQRAction = async (id) => {
     return Promise.resolve({
       status: false,
       data: null,
-      message: "QR Failed to fetch!",
+      message: err?.response?.data?.message || "QR Failed to fetch!",
     });
   }
 };
@@ -113,7 +113,30 @@ export const getAlbumDetailsAction = async (id) => {
     return Promise.resolve({
       status: false,
       data: null,
-      message: "Album details Failed to fetch!",
+      message: err?.response?.data?.message || "Album details Failed to fetch!",
+    });
+  }
+};
+export const deleteAlbumById = async (id) => {
+  try {
+    const res = await axiosInstance.delete(`/album/${id}`);
+
+    if (res.status === 200) {
+      return Promise.resolve({
+        status: true,
+        data: res.data,
+        message: "Album deleted successfully!",
+      });
+    }
+    throw new Error();
+  } catch (err) {
+    console.log(err);
+
+    delete axiosInstance.defaults.headers.Authorization;
+    return Promise.resolve({
+      status: false,
+      data: null,
+      message: err?.response?.data?.message || "Failed to delete!",
     });
   }
 };

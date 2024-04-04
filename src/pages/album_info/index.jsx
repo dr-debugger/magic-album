@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import HeaderWithBack from "../../components/HeaderWithBack";
 import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
+  deleteAlbumById,
   getAlbumDetailsAction,
   getQRAction,
 } from "../../actions/album_actions";
 import { toast } from "react-toastify";
 import { downloadBase64File } from "../../utils/utilsFunc";
+import SplashScreen from "../../components/SplashScreen";
 
 const AlbumInfo = () => {
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
   const params = useParams();
   const [qrData, setQrData] = useState("");
   const [albumData, setAlbumData] = useState(null);
@@ -24,11 +29,25 @@ const AlbumInfo = () => {
   };
 
   const getAlbum = async () => {
+    setLoading(true);
     const res = await getAlbumDetailsAction(params.id);
     console.log(res);
     if (res.status) {
       setAlbumData(res.data?.data || null);
     } else toast.error(res.message);
+    setLoading(false);
+  };
+
+  const deleteAlbum = async () => {
+    setLoading(true);
+    const res = await deleteAlbumById(params.id);
+    console.log(res);
+    if (res.status) {
+      toast.success(res.message);
+      setLoading(false);
+      navigate(`/`);
+    } else toast.error(res.message);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -223,7 +242,7 @@ const AlbumInfo = () => {
             sx={{
               py: 1,
               px: 2,
-              zIndex: 9999,
+              zIndex: 9,
               width: {
                 xs: "100%",
                 md: "auto",
@@ -261,7 +280,7 @@ const AlbumInfo = () => {
                 }}
                 variant="outlined"
                 fullWidth
-                // onClick={onUpload}
+                // onClick={deleteAlbum}
               >
                 Delete
               </Button>
@@ -269,6 +288,7 @@ const AlbumInfo = () => {
           </Paper>
         </Box>
       </Box>
+      {loading && <SplashScreen blur />}
     </div>
   );
 };
